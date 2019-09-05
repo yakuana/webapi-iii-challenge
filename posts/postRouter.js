@@ -46,10 +46,11 @@ router.delete('/:id', validatePostId, (req, res) => {
 });
 
 router.put('/:id', validatePostId, (req, res) => {
+    const { id } = req.params; // OR const id = req.params.id;
     const editPost = req.body;
 
     if (editPost.title && editPost.contents) {
-        db.update(editPost)
+        db.update(id, editPost)
             .then(post => {
                 res.status(200).json(post)
             })
@@ -73,7 +74,7 @@ function validatePostId(req, res, next) {
     const { id } = req.params; 
 
     if (id) {   
-        req.user = req.body
+        req.id = req.params.id
     } else {
         res.status(400).json({
             message: "Invalid post Id.",
