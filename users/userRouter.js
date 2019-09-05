@@ -22,11 +22,25 @@ router.post('/', validateUser, (req, res) => {
         })
 });
 
-router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
 
-});
+// help
+// router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
+//     const newPost = req.body;
 
-router.get('/', validateUser, (req, res) => {
+//     db.insert(newPost)
+//         .then(post => {
+//             res.status(201).json(post)
+//         })
+//         .catch(err => {
+//             res.status(500).json({
+//                 message: "There was an error while saving the comment to the database", 
+//                 error: err 
+//             })
+//         })
+// });
+
+router.get('/', (req, res) => {
+
     db.get()
         .then(users => {
             res.status(201).json(users);
@@ -40,9 +54,9 @@ router.get('/', validateUser, (req, res) => {
 });
 
 router.get('/:id', validateUserId, (req, res) => {
-    const { user_id } = req.params; 
+    const { id } = req.params; 
 
-    db.getById(user_id) 
+    db.getById(id) 
         .then(user => {
             res.status(200).json(user)
         }) 
@@ -55,9 +69,9 @@ router.get('/:id', validateUserId, (req, res) => {
 });
 
 router.get('/:id/posts', validateUserId, (req, res) => {
-    const { user_id } = req.params; 
+    const { id } = req.params; 
 
-    db.getUserPosts(user_id) 
+    db.getUserPosts(id) 
         .then(posts => {
             res.status(200).json(posts)
         }) 
@@ -70,11 +84,11 @@ router.get('/:id/posts', validateUserId, (req, res) => {
 });
 
 router.delete('/:id', validateUserId, (req, res) => {
-    const { user_id } = req.params; // OR const id = req.params.id;
+    const { id } = req.params; // OR const id = req.params.id;
     
-    db.remove(user_id) 
+    db.remove(id) 
         .then(user => {
-            res.status(200).json(post)
+            res.status(200).json(user)
         })
         .catch(err => {
             res.status(500).json({
@@ -84,11 +98,11 @@ router.delete('/:id', validateUserId, (req, res) => {
         })
 });
 
-router.put('/:id', validateUserId, validatePost, (req, res) => {
-    const { user_id } = req.params; // OR const id = req.params.id;
+router.put('/:id', validateUserId, (req, res) => {
+    const { id } = req.params; // OR const id = req.params.id;
     const newUser = req.body 
 
-    db.update(user_id, newUser)
+    db.update(id, newUser)
         .then(user => {
             res.status(200).json(user)
         })
@@ -103,9 +117,9 @@ router.put('/:id', validateUserId, validatePost, (req, res) => {
 //custom middleware
 
 function validateUserId(req, res, next) {
-    const { user_id } = req.params; 
+    const { id } = req.params; 
 
-    if (user_id) {   
+    if (id) {   
         req.user_id = req.params.user_id;
     } else {
         res.status(400).json({
