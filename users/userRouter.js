@@ -24,20 +24,20 @@ router.post('/', validateUser, (req, res) => {
 
 
 // help
-// router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
-//     const newPost = req.body;
+router.post('/:id/posts', validatePost, (req, res) => {
+    const newPost = req.body;
 
-//     db.insert(newPost)
-//         .then(post => {
-//             res.status(201).json(post)
-//         })
-//         .catch(err => {
-//             res.status(500).json({
-//                 message: "There was an error while saving the comment to the database", 
-//                 error: err 
-//             })
-//         })
-// });
+    db.insert(newPost)
+        .then(post => {
+            res.status(201).json(post)
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: "There was an error while saving the comment to the database", 
+                error: err 
+            })
+        })
+});
 
 router.get('/', (req, res) => {
 
