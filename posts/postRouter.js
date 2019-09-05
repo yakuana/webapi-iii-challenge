@@ -1,6 +1,11 @@
-const express = 'express';
+const express = require('express');
 
 const router = express.Router();
+
+router.use(express.json());
+
+// data base 
+const db = require('./postDb.js')
 
 router.get('/', (req, res) => {
     db.get() 
@@ -49,7 +54,7 @@ router.put('/:id', validatePostId, (req, res) => {
     const { id } = req.params; // OR const id = req.params.id;
     const editPost = req.body;
 
-    if (editPost.title && editPost.contents) {
+    if (editPost && editPost.text) {
         db.update(id, editPost)
             .then(post => {
                 res.status(200).json(post)
@@ -83,8 +88,6 @@ function validatePostId(req, res, next) {
 
     next(); 
 };
-
-
 
 
 module.exports = router;

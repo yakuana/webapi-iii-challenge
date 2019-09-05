@@ -1,9 +1,25 @@
-const express = 'express';
+const express = require('express');
 
 const router = express.Router();
 
+router.use(express.json());
+
+// data base 
+const db = require('./userDb.js');
+
 router.post('/', validateUser, (req, res) => {
-    const newUser = req.body 
+    const newUser = req.body;
+
+    db.insert(newUser)
+        .then(user => {
+            res.status(201).json(user)
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: "There was an error while saving the post to the database", 
+                error: err
+            })
+        })
 });
 
 router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
@@ -17,7 +33,7 @@ router.get('/', validateUser, (req, res) => {
         })
         .catch(err => {
             res.status(500).json({ 
-                message: "The users information could not be retrieved.", 
+                message: "The users information could not be retrieved.",
                 error: err
             })
         })
@@ -57,12 +73,12 @@ router.delete('/:id', validateUserId, (req, res) => {
     const { user_id } = req.params; // OR const id = req.params.id;
     
     db.remove(user_id) 
-        .then(post => {
+        .then(user => {
             res.status(200).json(post)
         })
         .catch(err => {
             res.status(500).json({
-                message: "The post could not be removed",
+                message: "The user could not be removed",
                 error: err
             })
         })
@@ -70,8 +86,18 @@ router.delete('/:id', validateUserId, (req, res) => {
 
 router.put('/:id', validateUserId, validatePost, (req, res) => {
     const { user_id } = req.params; // OR const id = req.params.id;
-   
-    db.insert()
+    const newUser = req.body 
+
+    db.update(user_id, newUser)
+        .then(user => {
+            res.status(200).json(user)
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: "The user information could not be modified.",
+                error: err
+            })
+        })
 });
 
 //custom middleware
