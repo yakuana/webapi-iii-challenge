@@ -4,7 +4,8 @@ const server = express();
 
 server.use(express.json());
 
-server.get('/', (req, res) => {
+
+server.get('/', logger, (req, res) => {
   res.send(`<h2>Let's write some middleware!</h2>`)
 }); 
 
@@ -12,12 +13,12 @@ server.get('/', (req, res) => {
 
 function logger(req, res, next) {
   console.log(
-    `[${new Date().toISOString()}] from ${req.method} to ${req.get('Origin')}`
+    `[${new Date().toISOString()}] ${req.method} from ${req.url}`
   ); 
 
   next(); 
 };
 
-server.use('/', logger);
+
 
 module.exports = server;
